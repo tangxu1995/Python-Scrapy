@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 from logging import getLogger
 from scrapy.http import HtmlResponse
 
@@ -112,10 +113,15 @@ class JdSeleniumDownloaderMiddleware(object):
 
 
 class SeleniumMiddleware():
+
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
     def __init__(self):
         self.logger = getLogger(__name__)
         self.timeout = 10
-        self.browser = webdriver.Chrome()
+        self.browser = webdriver.Chrome(chrome_options=self.chrome_options)
         self.browser.set_page_load_timeout(self.timeout)
         self.wait = WebDriverWait(self.browser, self.timeout)
 
@@ -124,7 +130,7 @@ class SeleniumMiddleware():
 
     def process_request(self, request, spider):
         """
-        用 Phantomjs 抓取页面
+        用 Chrome headless 抓取页面
         :param request: Request 对象
         :param spider: Spider 对象
         :return: HtmlResponse
