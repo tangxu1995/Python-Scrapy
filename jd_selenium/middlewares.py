@@ -135,7 +135,7 @@ class SeleniumMiddleware():
         :param spider: Spider 对象
         :return: HtmlResponse
         """
-        self.logger.debug('Phantomjs is Starting')
+        self.logger.debug('Chrome is Starting')
         try:
             self.browser.get(request.url)
             self.browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
